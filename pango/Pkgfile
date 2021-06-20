@@ -1,0 +1,19 @@
+# Description: A library for layout and rendering of text
+# URL:         https://www.gtk.org/
+# Maintainer:  ivandi
+# Depends on:  gobject-introspection fribidi harfbuzz
+# Optional:    xorg-libsm xorg-libxft
+
+name=pango
+version=1.48.5
+release=1
+source=(http://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz)
+
+build () {
+	meson build $name-$version \
+		--prefix=/usr \
+		--buildtype=plain
+
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+}

@@ -1,0 +1,23 @@
+# Description: Protocol definitions and daemon for D-Bus at-spi
+# URL:         https://gitlab.gnome.org/GNOME/at-spi2-core
+# Maintainer:  ivandi
+# Depends on:  dbus gobject-introspection intltool meson ninja
+# Optional:    xorg-libxtst
+
+name=at-spi2-core
+version=2.40.2
+release=1
+source=(https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz)
+
+build() {
+	meson setup build $name-$version \
+		--prefix /usr \
+		--sysconfdir=/usr/etc \
+		--libexecdir=/usr/lib/at-spi2 \
+		--buildtype=plain
+
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+
+	rm -r $PKG/usr/{share/locale,lib/systemd}
+}

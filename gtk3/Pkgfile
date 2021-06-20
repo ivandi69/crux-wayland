@@ -1,0 +1,26 @@
+# Description: A multi-platform toolkit for creating graphical user interfaces
+# URL:         https://www.gtk.org/
+# Maintainer:  CRUX System Team, core-ports at crux dot nu
+# Depends on:  at-spi2-atk gdk-pixbuf libepoxy pango
+
+name=gtk3
+version=3.24.29
+release=1
+source=(https://download.gnome.org/sources/gtk+/${version:0:4}/gtk+-$version.tar.xz
+		gtk.immodules gtk-register-3.sh)
+
+build() {
+	prt-get isinst wayland && PKGMK_GTK3+=" --enable-wayland-backend"
+	prt-get isinst xorg-libx11 || PKGMK_GTK3+=" --disable-x11-backend"
+
+	cd gtk+-$version
+
+	./configure --prefix=/usr $PKGMK_GTK3
+	make
+	make DESTDIR=$PKG install
+
+	install -m 0644 -D $SRC/gtk.immodules $PKG/usr/lib/gtk-3.0/3.0.0/immodules.cache
+	install -m 0755 $SRC/gtk-register-3.sh $PKG/usr/bin/gtk-register-3
+
+	rm -r $PKG/usr/share/{gtk-doc,locale,gtk-3.0}
+}
