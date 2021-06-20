@@ -10,17 +10,21 @@ source=(https://download.gnome.org/sources/gtk+/${version:0:4}/gtk+-$version.tar
 		gtk.immodules gtk-register-3.sh)
 
 build() {
-	prt-get isinst wayland && PKGMK_GTK3+=" --enable-wayland-backend"
-	prt-get isinst xorg-libx11 || PKGMK_GTK3+=" --disable-x11-backend"
+	prt-get isinst wayland || PKGMK_GTK3+=" -D wayland_backend=false"
+	prt-get isinst xorg-libx11 || PKGMK_GTK3+=" -D x11_backend=false"
 
-	cd gtk+-$version
+	meson build gtk+-$version \
+		--prefix=/usr \
+		--buildtype=plain \
+		-D examples=false \
+		-D tests=false \
+		$PKGMK_GTK3
 
-	./configure --prefix=/usr $PKGMK_GTK3
-	make
-	make DESTDIR=$PKG install
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
 
 	install -m 0644 -D $SRC/gtk.immodules $PKG/usr/lib/gtk-3.0/3.0.0/immodules.cache
 	install -m 0755 $SRC/gtk-register-3.sh $PKG/usr/bin/gtk-register-3
 
-	rm -r $PKG/usr/share/{gtk-doc,locale,gtk-3.0}
+	rm -r $PKG/usr/share/locale
 }
