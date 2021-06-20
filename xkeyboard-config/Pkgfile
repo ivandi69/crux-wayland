@@ -1,0 +1,27 @@
+# Description: X keyboard configuration database
+# URL:         https://cgit.freedesktop.org/xkeyboard-config/
+# Maintainer:  ivandi
+# Depends on:  intltool libxslt
+# Optional:    xorg-xkbcomp
+
+name=xkeyboard-config
+version=2.33
+release=1
+source=(https://www.x.org/releases/individual/data/$name/$name-$version.tar.bz2)
+
+build() {
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
+		--disable-nls \
+		--with-xkb-base=/usr/share/X11/xkb \
+		--with-xkb-rules-symlink=xorg \
+		--disable-runtime-deps
+
+	make -j1
+	make DESTDIR=$PKG install
+
+	ln -s /var/lib/xkb $PKG/usr/share/X11/xkb/compiled
+	find $PKG -name README -delete
+}

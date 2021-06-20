@@ -1,0 +1,27 @@
+# Description: A modular Wayland compositor library.
+# URL:         https://github.com/swaywm/wlroots
+# Maintainer:  ivandi
+# Depends on:  libinput libxkbcommon mesa meson ninja seatd wayland-protocols xorg-libpixman
+# Optional     xorg-xcb-util-image xorg-xcb-util-wm
+
+name=wlroots
+version=0.13.0
+release=1
+source=(https://github.com/swaywm/${name}/releases/download/${version}/${name}-${version}.tar.gz)
+
+build() {
+	if prt-get isinst xorg-libxcb ; then
+		PKGMK_WLROOTS_XWAYLAND="enabled"
+	else
+		PKGMK_WLROOTS_XWAYLAND="disabled"
+	fi
+
+	cd ${name}-${version}
+
+	meson build --prefix=/usr \
+		-D buildtype=plain \
+		-D examples=false \
+		-D xwayland=$PKGMK_WLROOTS_XWAYLAND
+
+	DESTDIR=${PKG} ninja -C build install
+}
