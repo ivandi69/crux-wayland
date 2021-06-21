@@ -1,0 +1,14 @@
+# Description: Sway Desktop Meta Port
+# URL:         
+# Maintainer: ivandi
+# Depends on: pam_xdg sway swaybg swayidle swaylock grim slurp wl-clipboard mako bemenu alacritty xorg-font-dejavu-ttf i3status-rust jq
+
+name=sway-desktop
+version=0.1.0
+release=1
+source=()
+
+build() {
+	install -d ${PKG}/usr/etc
+	echo ${version} > ${PKG}/usr/etc/${name}
+}

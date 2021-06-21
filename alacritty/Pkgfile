@@ -1,0 +1,32 @@
+# Description: A cross-platform, GPU-accelerated terminal emulator
+# URL:         https://github.com/alacritty/alacritty
+# Maintainer:  ivandi
+# Depends on:  fontconfig rust util-linux wayland-protocols
+# Optional:    xorg-libxcb
+
+name=alacritty
+version=0.8.0
+release=1
+source=(https://github.com/alacritty/alacritty/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	mkdir -p $PKGMK_SOURCE_DIR/rust
+	export CARGO_HOME=$PKGMK_SOURCE_DIR/rust
+
+	PKGMK_ALACRITTY="wayland"
+	prt-get isinst xorg-libxcb && PKGMK_ALACRITTY+=",x11"
+
+	cargo update --manifest-path $name-$version/Cargo.toml
+	cargo build --release --locked --manifest-path $name-$version/Cargo.toml --no-default-features --features $PKGMK_ALACRITTY
+
+	install -D -m755 $name-$version/target/release/alacritty $PKG/usr/bin/alacritty
+	install -D -m644 $name-$version/extra/alacritty.man $PKG/usr/share/man/man1/alacritty.1
+	install -D -m644 $name-$version/extra/linux/io.alacritty.Alacritty.appdata.xml $PKG/usr/share/appdata/io.alacritty.Alacritty.appdata.xml
+	install -D -m644 $name-$version/alacritty.yml $PKG/usr/share/alacritty/alacritty.yml
+	install -D -m644 $name-$version/extra/linux/Alacritty.desktop $PKG/usr/share/applications/Alacritty.desktop
+	install -D -m644 $name-$version/extra/logo/alacritty-term.svg $PKG/usr/share/pixmaps/Alacritty.svg
+
+	# install auto-completion files if the ports for it are installed
+	prt-get isinst zsh && install -D -m644 $name-$version/extra/completions/_alacritty $PKG/usr/share/zsh/site-functions/_alacritty || true
+	prt-get isinst bash-completion && install -D -m644 $name-$version/extra/completions/alacritty.bash $PKG/usr/share/bash-completion/completions/alacritty || true
+}

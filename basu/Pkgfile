@@ -1,0 +1,15 @@
+# Description: The sd-bus library, extracted from systemd.
+# URL:         https://github.com/emersion/basu
+# Maintainer:  ivandi
+# Depends on:  dbus
+
+name=basu
+version=0.2.0
+release=1
+source=(https://github.com/emersion/${name}/releases/download/v${version}/${name}-${version}.tar.gz)
+
+build() {
+    cd ${name}-${version}
+    meson build --prefix=/usr -D buildtype=plain
+    DESTDIR=${PKG} ninja -C build install
+}

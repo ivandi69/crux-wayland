@@ -1,0 +1,22 @@
+# Description: Sway's idle management daemon
+# URL:         https://swaywm.org/
+# Maintainer:  ivandi
+# Depends on:  meson ninja scdoc wayland-protocols
+
+name=swayidle
+version=1.6
+release=1
+source=(https://github.com/swaywm/${name}/releases/download/${version}/${name}-${version}.tar.gz)
+
+build() {
+	prt-get isinst bash-completion || PKGMK_SWAYIDLE+=" -D bash-completions=false"
+	prt-get isinst zsh || PKGMK_SWAYIDLE+=" -D zsh-completions=false"
+
+	cd ${name}-${version}
+	meson build --prefix=/usr \
+		-D buildtype=plain \
+		-D fish-completions=false \
+		${PKGMK_SWAYIDLE}
+
+	DESTDIR=${PKG} ninja -C build install
+}

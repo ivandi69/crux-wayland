@@ -1,0 +1,22 @@
+# Description: Screen locking utility for Wayland compositors
+# URL:         https://swaywm.org/
+# Maintainer:  ivandi
+# Depends on:  cairo gdk-pixbuf meson ninja scdoc wayland-protocols libxkbcommon
+
+name=swaylock
+version=1.5
+release=1
+source=(https://github.com/swaywm/${name}/releases/download/${version}/${name}-${version}.tar.gz)
+
+build() {
+	prt-get isinst bash-completion || PKGMK_SWAYLOCK+=" -D bash-completions=false"
+	prt-get isinst zsh || PKGMK_SWAYLOCK+=" -D zsh-completions=false"
+
+	cd ${name}-${version}
+	meson build --prefix=/usr \
+		-D buildtype=plain \
+		-D fish-completions=false \
+		${PKGMK_SWAYLOCK}
+
+	DESTDIR=${PKG} ninja -C build install
+}

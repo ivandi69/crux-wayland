@@ -1,0 +1,22 @@
+# Description: Lightweight and flexible command-line JSON processor
+# URL:         https://stedolan.github.io/jq/
+# Maintainer:  ivandi
+
+name=jq
+version=1.6
+release=1
+source=(https://github.com/stedolan/jq/releases/download/jq-$version/jq-$version.tar.gz)
+
+build() {
+
+	cd $name-$version
+	cd modules/oniguruma
+	autoreconf -ivf
+	cd -
+	./configure --prefix=/usr --with-onigurama=builtin
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/doc
+}

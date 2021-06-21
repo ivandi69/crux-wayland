@@ -1,0 +1,27 @@
+# Description: An i3-compatible wayland compositor.
+# URL:         https://swaywm.org/
+# Maintainer:  ivandi
+# Depends on:  basu gdk-pixbuf json-c meson ninja pango wlroots scdoc
+
+name=sway
+version=1.6
+release=1
+source=(https://github.com/swaywm/${name}/releases/download/${version}/${name}-${version}.tar.gz)
+
+build() {
+	prt-get isinst bash-completion || PKGMK_SWAY+=" -D bash-completions=false"
+	prt-get isinst zsh || PKGMK_SWAY+=" -D zsh-completions=false"
+
+	cd ${name}-${version}
+	meson build \
+		--prefix=/usr \
+		--sysconfdir=/usr/etc \
+		-D buildtype=plain \
+		-D fish-completions=false \
+		${PKGMK_SWAY}
+
+	DESTDIR=${PKG} ninja -C build install
+
+	install -D -m 755 -o root -g root contrib/grimshot ${PKG}/usr/bin
+	install -D -m 644 -o root -g root contrib/grimshot.1 ${PKG}/usr/share/man/man1
+}

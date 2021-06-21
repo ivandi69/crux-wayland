@@ -1,0 +1,20 @@
+# Description: Dynamic menu library and client program inspired by dmenu
+# URL:         https://github.com/Cloudef/bemenu
+# Maintainer:  ivandi
+# Depends on:  wayland-protocols, pango, libxkbcommon
+# Optional:    xorg-libxinerama
+
+name=bemenu
+version=0.6.2
+release=1
+source=(https://github.com/Cloudef/${name}/archive/${version}/${name}-${version}.tar.gz)
+
+build() {
+	PKGMK_BEMENU="clients curses"
+	prt-get isinst xorg-libx11 && PKGMK_BEMENU+=" x11"
+	prt-get isinst wayland && PKGMK_BEMENU+=" wayland"
+
+	cd ${name}-${version}
+	make PREFIX=/usr ${PKGMK_BEMENU}
+	make -j1 PREFIX=/usr DESTDIR=${PKG} ${PKGMK_BEMENU} install
+}

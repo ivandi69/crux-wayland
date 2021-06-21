@@ -1,0 +1,15 @@
+# Description: Wallpaper utility for Wayland compositors.
+# URL:         https://swaywm.org/
+# Maintainer:  ivandi
+# Depends on:  gdk-pixbuf meson ninja scdoc wayland-protocols
+
+name=swaybg
+version=1.0
+release=1
+source=(https://github.com/swaywm/${name}/archive/${version}/${name}-${version}.tar.gz)
+
+build() {
+    cd ${name}-${version}
+    meson build --prefix=/usr -D buildtype=plain
+    DESTDIR=${PKG} ninja -C build install
+}
