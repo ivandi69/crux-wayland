@@ -1,8 +1,8 @@
 # Description: Mesa 3D Graphics Library
 # URL:         https://www.mesa3d.org/
 # Maintainer:  ivandi
-# Depends on:  elfutils glslang libdrm llvm meson ninja python3-mako vulkan-loader wayland-protocols lm_sensors 
-# Optional     libva libvdpau libglvnd xorg-libxdamage xorg-libxrandr xorg-libxshmfence xorg-libxvmc xorg-libxxf86vm
+# Depends on:  elfutils glslang libdrm libglvnd llvm meson ninja python3-mako vulkan-loader wayland-protocols lm_sensors 
+# Optional     libva libvdpau xorg-libxdamage xorg-libxrandr xorg-libxshmfence xorg-libxvmc xorg-libxxf86vm
 
 name=mesa
 version=21.1.3
@@ -12,11 +12,9 @@ source=(https://mesa.freedesktop.org/archive/${name}-${version}.tar.xz)
 build() {
 	if prt-get isinst xorg-libx11 ; then
 		PKGMK_MESA_GLX="gri"
-		PKGMK_MESA_GLVND="true"
 		PKGMK_MESA_PLATFORMS="x11,wayland"
 	else
 		PKGMK_MESA_GLX="disabled"
-		PKGMK_MESA_GLVND="false"
 		PKGMK_MESA_PLATFORMS="wayland"
 	fi
 	cd ${name}-${version}
@@ -41,9 +39,9 @@ build() {
 		-D vulkan-layers=device-select,intel-nullhw,overlay \
 		-D swr-arches=avx,avx2 \
 		-D lmsensors=enabled \
+		-D glvnd=true \
 		-D platforms=$PKGMK_MESA_PLATFORMS \
-		-D glx=$PKGMK_MESA_GLX \
-		-D glvnd=$PKGMK_MESA_GLVND
+		-D glx=$PKGMK_MESA_GLX
 
 	DESTDIR=${PKG} ninja -C build install
 }
