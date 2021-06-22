@@ -1,7 +1,7 @@
 # Description: Sway Desktop Meta Port
 # URL:         
 # Maintainer: ivandi
-# Depends on: pam_xdg jq gtk3 xorg-font-dejavu-ttf adwaita-icon-theme sway swaybg swayidle swaylock grim slurp wl-clipboard mako bemenu alacritty i3status-rust
+# Depends on: pam_xdg jq gtk3 xorg-font-dejavu-ttf adwaita-icon-theme sway swaybg swayidle swaylock grim slurp wl-clipboard mako bemenu alacritty i3status-rust imv
 
 name=sway-desktop
 version=0.1.0

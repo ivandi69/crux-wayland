@@ -1,0 +1,31 @@
+From 70a70727b74c532ffb303023b3eb215310948b31 Mon Sep 17 00:00:00 2001
+From: "Haelwenn (lanodan) Monnier" <contact@hacktivis.me>
+Date: Tue, 3 Nov 2020 09:00:51 +0100
+Subject: [PATCH] Fallback to 'opengl' when dependency('gl') fails
+
+This allows for imv to work on a system where libX11 is fully removed
+---
+ meson.build | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 5e8acd6..73137c9 100644
+--- a/meson.build
++++ b/meson.build
+@@ -37,9 +37,15 @@ else
+   target_single_ws = false
+ endif
+ 
++gl_dep = dependency('gl', required: false)
++if not gl_dep.found()
++  # libglvnd fallback for pure-wayland systems
++  gl_dep = dependency('opengl')
++endif
++
+ deps_for_imv = [
+   dependency('pangocairo'),
+-  dependency('gl'),
++  gl_dep,
+   dependency('threads'),
+   dependency('xkbcommon'),
+   dependency('icu-io'),
