@@ -1,7 +1,7 @@
 # Description: X11/Wayland Image Viewer
 # URL:         https://github.com/eXeC64/imv
 # Maintainer:  ivandi
-# Depends on:  asciidoc icu inih libglvnd wayland-protocols xkbcommon libjpeg-turbo libpng libtiff librsvg meson ninja
+# Depends on:  asciidoc icu inih libglvnd wayland-protocols libxkbcommon libjpeg-turbo libpng libtiff librsvg meson ninja
 # Optional:    xorg-libxcb
 
 name=imv
