@@ -11,7 +11,7 @@ source=(https://download.gnome.org/sources/gtk+/${version:0:4}/gtk+-$version.tar
 
 build() {
 	prt-get isinst wayland || PKGMK_GTK3+=" -D wayland_backend=false"
-	prt-get isinst xorg-libx11 || PKGMK_GTK3+=" -D x11_backend=false"
+	prt-get isinst xorg-libx11 || PKGMK_GTK3+=" -D x11_backend=false -D c_args=-DEGL_NO_X11"
 
 	meson build gtk+-$version \
 		--prefix=/usr \
