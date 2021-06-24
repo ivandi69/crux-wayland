@@ -1,0 +1,15 @@
+# Description: Xorg libs needed by ports like firefox-bin
+# URL:
+# Maintainer:  ivandi
+# Depends on:
+
+name=xorg-libs-bin
+version=0.1.0
+release=1
+source=(xorg-libs-bin.tar.xz xorg-libs-bin.conf)
+
+build() {
+	install -d $PKG/opt
+	mv $SRC/lib $PKG/opt
+	install -D -m 644 $SRC/xorg-libs-bin.conf $PKG/etc/ld.so.conf.d/xorg-libs-bin.conf
+}
