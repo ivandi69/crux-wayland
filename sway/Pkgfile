@@ -4,7 +4,7 @@
 # Depends on:  basu gdk-pixbuf json-c meson ninja pango wlroots scdoc
 
 name=sway
-version=1.6
+version=1.6.1
 release=1
 source=(https://github.com/swaywm/${name}/releases/download/${version}/${name}-${version}.tar.gz)
 
