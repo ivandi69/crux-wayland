@@ -16,9 +16,9 @@ build() {
 	meson build gtk+-$version \
 		--prefix=/usr \
 		--buildtype=plain \
+		$PKGMK_GTK3 \
 		-D examples=false \
-		-D tests=false \
-		$PKGMK_GTK3
+		-D tests=false
 
 	meson compile -C build -j ${JOBS:-1}
 	DESTDIR=$PKG meson install -C build
