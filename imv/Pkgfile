@@ -2,7 +2,7 @@
 # URL:         https://github.com/eXeC64/imv
 # Maintainer:  ivandi
 # Depends on:  asciidoc icu inih libglvnd wayland-protocols libxkbcommon libjpeg-turbo libpng libtiff librsvg meson ninja
-# Optional:    xorg-libxcb
+# Optional:    xorg-libx11
 
 name=imv
 version=4.2.0
@@ -11,11 +11,11 @@ source=(https://github.com/eXeC64/imv/archive/v${version}/${name}-${version}.tar
 		70a70727b74c532ffb303023b3eb215310948b31.patch)
 
 build() {
-	prt-get isinst xorg-libxcb && PKGMK_IMV="all" || PKGMK_IMV="wayland"
+	prt-get isinst xorg-libx11 || PKGMK_IMV+=" -D windows=wayland"
 
     cd ${name}-${version}
 	patch -Np1 -i ${SRC}/70a70727b74c532ffb303023b3eb215310948b31.patch
 
-    meson build --prefix=/usr -D buildtype=plain -D windows=$PKGMK_IMV
+    meson build --prefix=/usr -D buildtype=plain ${PKGMK_IMV}
     DESTDIR=${PKG} ninja -C build install
 }
