@@ -11,16 +11,17 @@ source=(https://mesa.freedesktop.org/archive/${name}-${version}.tar.xz)
 
 build() {
 	if prt-get isinst xorg-libx11 ; then
-		PKGMK_MESA_GLX="gri"
-		PKGMK_MESA_PLATFORMS="x11,wayland"
+		PKGMK_MESA+=" -D glx=gri -D platforms=x11,wayland"
 	else
-		PKGMK_MESA_GLX="disabled"
-		PKGMK_MESA_PLATFORMS="wayland"
+		PKGMK_MESA+=" -D glx=disabled -D platforms=wayland"
 	fi
+
 	cd ${name}-${version}
+
 	meson build \
 		--prefix=/usr \
 		--sysconfdir=/etc \
+		${PKGMK_MESA} \
 		-D buildtype=plain \
 		-D b_ndebug=true \
 		-D b_lto=false \
@@ -39,9 +40,7 @@ build() {
 		-D vulkan-layers=device-select,intel-nullhw,overlay \
 		-D swr-arches=avx,avx2 \
 		-D lmsensors=enabled \
-		-D glvnd=true \
-		-D platforms=$PKGMK_MESA_PLATFORMS \
-		-D glx=$PKGMK_MESA_GLX
+		-D glvnd=true
 
 	DESTDIR=${PKG} ninja -C build install
 }
