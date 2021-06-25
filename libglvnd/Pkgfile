@@ -7,10 +7,13 @@
 name=libglvnd
 version=1.3.3
 release=1
-source=(https://github.com/NVIDIA/$name/archive/v$version/$name-$version.tar.gz)
+source=(https://github.com/NVIDIA/${name}/archive/v${version}/${name}-${version}.tar.gz
+		EGL_NO_X11.patch)
 
 build() {
-	cd $name-$version
+	cd ${name}-${version}
+
+	prt-get isinst xorg-libx11 || patch -Np1 -i ${SRC}/EGL_NO_X11.patch
 
 	meson build --prefix=/usr -D buildtype=plain
 
