@@ -1,8 +1,8 @@
 # Description: Mesa 3D Graphics Library
 # URL:         https://www.mesa3d.org/
 # Maintainer:  ivandi
-# Depends on:  elfutils glslang libdrm libglvnd llvm meson ninja python3-mako vulkan-loader wayland-protocols lm_sensors 
-# Optional     libva libvdpau xorg-libxdamage xorg-libxrandr xorg-libxshmfence xorg-libxvmc xorg-libxxf86vm
+# Depends on:  elfutils glslang libdrm libglvnd libva llvm meson ninja python3-mako vulkan-loader wayland-protocols lm_sensors 
+# Optional     libvdpau xorg-libxdamage xorg-libxrandr xorg-libxshmfence xorg-libxvmc xorg-libxxf86vm
 
 name=mesa
 version=21.1.3
@@ -34,8 +34,9 @@ build() {
 		-D dri3=enabled \
 		-D egl=enabled \
 		-D dri-drivers=i915,i965,r100,r200,nouveau \
-		-D osmesa=true \
 		-D gallium-drivers=r300,r600,radeonsi,nouveau,virgl,svga,swrast,swr,iris,zink \
+		-D gallium-va=enabled \
+		-D gallium-xa=enabled \
 		-D vulkan-drivers=amd,intel,swrast \
 		-D vulkan-layers=device-select,intel-nullhw,overlay \
 		-D swr-arches=avx,avx2 \
