@@ -1,0 +1,22 @@
+# Description: Reusable library for GPU-accelerated video/image rendering primitives
+# URL:         https://github.com/haasn/libplacebo
+# Maintainer:  ivandi
+# Depends on:  ffmpeg glfw3 lcms2 libepoxy shaderc vulkan-loader
+
+name=libplacebo
+version=3.120.3
+release=1
+source=(https://code.videolan.org/videolan/libplacebo/-/archive/v$version/$name-v$version.tar.gz)
+
+build() {
+	meson setup build $name-v$version \
+		--prefix=/usr \
+		--buildtype=plain \
+		-D vulkan=enabled \
+		-D glslang=enabled \
+		-D shaderc=enabled \
+		-D lcms=enabled
+
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+}
