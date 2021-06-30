@@ -1,0 +1,25 @@
+# Description: A multi-platform library for OpenGL, OpenGL ES and Vulkan development
+# URL:         https://www.glfw.org
+# Maintainer:  ivandi
+# Depends on:  libglvnd vulkan-loader extra-cmake-modules
+# Optional:    xorg-libxcursor xorg-libxi xorg-libxinerama
+
+name=glfw3
+version=3.3.4
+release=1
+source=(https://github.com/glfw/glfw/releases/download/$version/glfw-$version.zip)
+
+build() {
+	prt-get isinst ninja && PKGMK_GLFW+=' -G Ninja'
+	prt-get isinst xorg-libx11 || PKGMK_GLFW+=' -D GLFW_USE_WAYLAND=1'
+
+	cmake -S glfw-$version -B build $PKGMK_GLFW \
+		-D CMAKE_INSTALL_PREFIX=/usr \
+		-D CMAKE_INSTALL_LIBDIR=lib \
+		-D CMAKE_BUILD_TYPE=Release \
+		-D CMAKE_C_FLAGS_RELEASE="${CFLAGS}" \
+		-D BUILD_SHARED_LIBS=ON
+
+	cmake --build build
+	DESTDIR=$PKG cmake --build build --target install
+}
