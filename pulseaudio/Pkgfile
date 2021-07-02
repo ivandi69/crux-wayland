@@ -10,7 +10,7 @@ release=3
 source=(https://freedesktop.org/software/pulseaudio/releases/pulseaudio-$version.tar.xz)
 
 build() {
-  [[ -e "/usr/lib/pkgconfig/xtst.pc" && -e "/usr/lib/pkgconfig/ice.pc" ]] || PKGMK_PULSEAUDIO+=' -D x11=disabled'
+  [[ -e "/usr/lib/pkgconfig/xtst.pc" && -e "/usr/lib/pkgconfig/ice.pc" ]] || PKGMK_PULSEAUDIO+=' -D x11=disabled  -D gtk=disabled'
   [[ -e "/usr/lib/pkgconfig/bluez.pc" && -e "/usr/lib/pkgconfig/sbc.pc" ]] || PKGMK_PULSEAUDIO+=' -D bluez5=false'
   [[ -e /usr/lib/pkgconfig/gstreamer-1.0.pc && -e "usr/lib/pkgconfig/gstreamer-plugins-base-1.0.pc" ]] && PKGMK_PULSEAUDIO+=' -D gstreamer=enabled'
   [[ -e /usr/lib/pkgconfig/bash-completion.pc ]] || PKGMK_PULSEAUDIO+=' -D bashcompletiondir=no'
@@ -25,7 +25,6 @@ build() {
     -D udevrulesdir=/etc/udev/rules.d \
     -D database=gdbm \
     -D tests=false \
-	-D gtk=disabled \
     -D speex=enabled \
     -D adrian-aec=false
   meson compile -C build
